@@ -105,7 +105,7 @@ function ACSIServer({ settings, updateModel, getModel, connections: propConnecti
 
   // A restart (or fresh visit with no navigation state) should not guess a
   // real instance - only a real prior selection counts as "preferred", so
-  // the dropdown falls back to blank ("Select instance...") rather than
+  // the dropdown falls back to blank ("Default (localhost:8765)") rather than
   // guessing one. Blank is *not* itself a selection - it's just "nothing
   // chosen yet" - so it's never persisted (see the effect below); whatever
   // the dropdown's value actually is (a real instance name, or "custom")
@@ -121,7 +121,7 @@ function ACSIServer({ settings, updateModel, getModel, connections: propConnecti
   const instanceMatchedRef = useRef(false);
   // WS Host/Port/Mode are editable in both states where there's no real
   // instance backing them: "custom" (an explicit choice) and blank
-  // (nothing chosen yet, showing "Select instance..." with usable
+  // (the default target, showing "Default (localhost:8765)" with usable
   // placeholder defaults instead of leaving the fields read-only and
   // un-correctable - see the sync effect below).
   const isCustomInstance = selectedInstanceName === 'custom';
@@ -168,6 +168,16 @@ function ACSIServer({ settings, updateModel, getModel, connections: propConnecti
   const handleInstanceSelect = useCallback((e) => {
     const value = e.target.value;
     setSelectedInstanceName(value);
+    if (value === '') {
+      // Blank is the selectable default target: restore its defaults and
+      // forget the persisted selection, so it isn't preferred again on the
+      // next visit.
+      localStorage.removeItem(selectedInstanceStorageKey);
+      setHost('localhost');
+      setPort('8765');
+      setMode('active');
+      return;
+    }
     if (value === 'custom') {
       // Fresh custom entry starts fully blank for the user to fill in, not
       // whatever host/port were left over from a previously-selected
@@ -201,7 +211,7 @@ function ACSIServer({ settings, updateModel, getModel, connections: propConnecti
       // selected, not stay blank.
       setMode('active');
     }
-  }, [soTargetInstances]);
+  }, [soTargetInstances, selectedInstanceStorageKey]);
 
   const handleExpandToggle = useCallback((ref, expanded) => {
     setExpandedNodes(prev => ({
@@ -905,7 +915,7 @@ function ACSIServer({ settings, updateModel, getModel, connections: propConnecti
               disabled={!endpoint || loading || connected}
               title={!endpoint ? 'No FSP instance selected' : connected ? 'Stop the server before switching instances' : undefined}
             >
-              <option value="" disabled>Select instance...</option>
+              <option value="">Default (localhost:8765)</option>
               {soTargetInstances.map(inst => {
                 // Without a ws_port this instance has nowhere for the FSP to
                 // dial into - selecting it is a dead end (WS Port stays
@@ -935,7 +945,7 @@ function ACSIServer({ settings, updateModel, getModel, connections: propConnecti
 
         {/* Editable when there's no real instance backing them yet: a
             "custom" choice, or nothing chosen at all (blank, showing
-            "Select instance..." with usable defaults). Picking a real
+            "Default (localhost:8765)" with usable defaults). Picking a real
             instance from the dropdown above pre-fills these read-only,
             from that instance's own configuration. */}
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '16px', flexWrap: 'wrap' }}>

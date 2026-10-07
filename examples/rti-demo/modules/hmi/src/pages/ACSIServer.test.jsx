@@ -167,7 +167,7 @@ describe('ACSIServer recovering the endpoint from ?fsp= after a refresh', () => 
 });
 
 describe('ACSIServer instance selection - fresh/no prior selection', () => {
-  it('stays on "Select instance..." with editable localhost/8765/active when nothing is selected or persisted', async () => {
+  it('stays on "Default (localhost:8765)" with editable localhost/8765/active when nothing is selected or persisted', async () => {
     renderPage();
 
     await waitFor(() => {
@@ -177,8 +177,8 @@ describe('ACSIServer instance selection - fresh/no prior selection', () => {
       // shouldn't pick one of them.
       expect(screen.getByRole('option', { name: /^so1/ })).toBeInTheDocument();
     });
-    // "" is the disabled "Select instance..." placeholder option's value -
-    // blank is not itself a selection.
+    // "" is the "Default (localhost:8765)" option's value - blank is not
+    // itself a persisted selection.
     expect(screen.getByLabelText('Instance')).toHaveValue('');
 
     // Landing on a blank/read-only Instance left the WS fields un-editable
@@ -286,6 +286,29 @@ describe('ACSIServer instance selection - ws_port vs BFF port', () => {
     // Must NOT be 5003 (so2's BFF port) - this is the exact bug being
     // regression-tested: silently falling back to the BFF port.
     expect(screen.getByLabelText('WS Port')).toHaveValue('');
+  });
+
+  it('restores localhost/8765 and forgets the persisted selection when switching back to the default', async () => {
+    renderPage();
+    const user = userEvent.setup({ delay: null });
+
+    await waitFor(() => {
+      expect(screen.getByRole('option', { name: /^so1/ })).toBeInTheDocument();
+    });
+    await user.selectOptions(screen.getByLabelText('Instance'), 'so1');
+    await waitFor(() => {
+      expect(screen.getByLabelText('WS Host')).toHaveValue('10.0.0.1');
+    });
+    expect(localStorage.getItem('acsi-server-selected-instance-FSP01')).toBe('so1');
+
+    await user.selectOptions(screen.getByLabelText('Instance'), '');
+
+    expect(screen.getByLabelText('Instance')).toHaveValue('');
+    expect(screen.getByLabelText('WS Host')).toHaveValue('localhost');
+    expect(screen.getByLabelText('WS Port')).toHaveValue('8765');
+    expect(screen.getByLabelText('WS Mode')).toHaveValue('active');
+    expect(screen.getByLabelText('WS Host')).not.toHaveAttribute('readonly');
+    expect(localStorage.getItem('acsi-server-selected-instance-FSP01')).toBeNull();
   });
 
   it('clears all WS fields when switching to "custom"', async () => {
