@@ -142,7 +142,7 @@ const ControlModal = ({ objRef, objName, cdc, endpoint, cp, onClose, onSuccess, 
   };
 
   return (
-    <div className="control-window">
+    <div className="control-window" style={{ display: 'flex' }}>
       <div className="modal-content">
         <h2>Control Operation</h2>
         <div className="form-group">
