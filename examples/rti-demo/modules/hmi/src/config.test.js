@@ -17,11 +17,11 @@ describe('default BFF address', () => {
     vi.unstubAllEnvs();
   });
 
-  it('is localhost:5000 when nothing is configured', async () => {
+  it("is the page's host and port 5000 when nothing is configured", async () => {
     vi.stubEnv('VITE_BFF_HOST', '');
     vi.stubEnv('VITE_BFF_PORT', '');
     const { DEFAULT_BFF_HOST, DEFAULT_BFF_PORT } = await loadConfig();
-    expect(DEFAULT_BFF_HOST).toBe('localhost');
+    expect(DEFAULT_BFF_HOST).toBe(window.location.hostname);
     expect(DEFAULT_BFF_PORT).toBe('5000');
   });
 
