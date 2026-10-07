@@ -1,90 +1,38 @@
 [
   {
     "id": 1,
-    "name": "Demo_Pi1",
-    "host": "192.168.178.33",
+    "name": "SO",
+    "host": "rti-so",
     "port": 5002,
     "type": "RTI-SO",
     "acsi": "client",
     "ws_mode": "passive",
+    "ws_port": 8765,
     "auto_discovered": false,
-    "created_at": "2026-08-28T11:28:21.138354",
-    "OAuth": {
-      "certificate_endpoint": "https://192.168.100.14:8443/realms/iec61850-websocket/protocol/openid-connect/certs",
-      "auth_server_ca": null,
-      "realm": "iec61850-websocket",
-      "enable_token_refresh": false,
-      "idp_server": "keycloak",
-      "enable_oauth": false,
-      "token_issuer": "https://192.168.100.14:8443/realms/iec61850-websocket",
-      "token_endpoint": "",
-      "client_id": "",
-      "client_secret": ""
-    },
-    "status": "connected",
-    "endpoint": "",
-    "TLS": {
-      "enable_tls": false,
-      "tls_version": "TLSv1_2",
-      "server_key": null,
-      "server_cert": null,
-      "server_ca": null
-    }
+    "created_at": "2026-01-01T00:00:00"
   },
   {
     "id": 2,
-    "name": "demo_pi2",
-    "host": "192.168.178.33",
+    "name": "FSP 1",
+    "host": "rti-fsp01",
     "port": 5001,
     "type": "RTI-FSP",
     "acsi": "server",
     "ws_mode": "active",
+    "cp": "cp1",
     "auto_discovered": false,
-    "created_at": "2026-08-28T11:40:39.285837",
-    "OAuth": {
-      "auth_server_ca": null,
-      "realm": "iec61850-websocket",
-      "token_endpoint": "https://192.168.100.14:8443/realms/iec61850-websocket/protocol/openid-connect/token",
-      "client_id": "rti-fsp",
-      "client_secret": "Af901GzeYXmZAqtJc03jGkHLEwgyPyHN",
-      "enable_token_refresh": false,
-      "idp_server": "keycloak",
-      "enable_oauth": false,
-      "certificate_endpoint": "",
-      "token_issuer": ""
-    },
-    "status": "connected",
-    "endpoint": "",
-    "TLS": {
-      "enable_tls": false,
-      "tls_version": "TLSv1_2",
-      "server_key": null,
-      "server_cert": null,
-      "server_ca": null
-    }
+    "created_at": "2026-01-01T00:00:00"
   },
   {
     "id": 3,
-    "name": "testFSP2",
-    "host": "192.168.178.33",
+    "name": "FSP 2",
+    "host": "rti-fsp02",
     "port": 5005,
     "type": "RTI-FSP",
     "acsi": "server",
     "ws_mode": "active",
+    "cp": "cp2",
     "auto_discovered": false,
-    "created_at": "2026-09-03T11:49:02.508434",
-    "OAuth": {
-      "certificate_endpoint": "",
-      "auth_server_ca": "",
-      "realm": "",
-      "token_endpoint": "",
-      "client_id": "rti-fsp",
-      "client_secret": "Af901GzeYXmZAqtJc03jGkHLEwgyPyHN",
-      "enable_token_refresh": false,
-      "idp_server": "",
-      "token_issuer": ""
-    },
-    "status": "disconnected",
-    "endpoint": ""
+    "created_at": "2026-01-01T00:00:00"
   }
 ]
