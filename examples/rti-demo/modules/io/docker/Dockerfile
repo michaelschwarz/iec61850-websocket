@@ -35,8 +35,10 @@ COPY pyproject.toml uv.lock /app/
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv venv && uv sync --frozen --no-dev
 
-# Copy application code
+# Copy application code, and the io_client files served to the FSPs on
+# /api/io-plugin/connect (io_api_server/io_client_file_server.py)
 COPY io_api_server/ /app/io/io_api_server/
+COPY io_client/ /app/io/io_client/
 
 
 # ============================================================
